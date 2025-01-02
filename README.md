@@ -1,5 +1,6 @@
 # GeekSquad_TestRepo
 This repo is created for rebuilding team work's culture.
+This is Feature branch focusing on Login and Authentication Flow.
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
