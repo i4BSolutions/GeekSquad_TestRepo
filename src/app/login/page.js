@@ -1,8 +1,7 @@
-export default function Login() {
+import AuthFormComponent from '../components/LoginForm';
+
+export default function Login(){
   return (
-    <div>
-      <h1>Login</h1>
-      <p>Log in to your account.</p>
-    </div>
-  );
+    <AuthFormComponent/>
+  )
 }
