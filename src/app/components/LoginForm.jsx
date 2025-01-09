@@ -81,7 +81,7 @@ export default function AuthFormComponent() {
           value={formData.password}
           onChange={(e)=> setFormData({...formData,password:e.target.value})}
         />
-        <Button type="submit" fullWidth variant="contained " sx={{marginTop:2}}
+        <Button type="submit" fullWidth variant="contained" sx={{marginTop:2}}
         onClick={handleSubmit}>
             Login</Button>
        
