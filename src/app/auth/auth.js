@@ -99,7 +99,7 @@ export async function login(req, res) {
   );
   if (!passwordMatched) {
     return NextResponse.json(
-      { error: "Password does not match" },
+      { error: "Password uncorrect!" },
       { status: 400 }
     );
   }
