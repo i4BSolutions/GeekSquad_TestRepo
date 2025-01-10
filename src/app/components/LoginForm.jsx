@@ -17,9 +17,8 @@ export default function AuthFormComponent() {
     email: "",
     password: "",
   })
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setServerError(""); // Clear server errors
 
     // Validate the form
     const { isValid, errors: validationErrors } = validateLoginForm(formData);
@@ -44,12 +43,24 @@ const handleSubmit = async (e) => {
         window.location.href = "/dashboard"; // Redirect to dashboard
       } else {
         const errorData = await response.json();
-        console.error("Error response from server:", errorData.error || "Unknown error");
-        setServerError(errorData.error || "Invalid email or password.");
+        console.log("Error response from server:", errorData.error?.includes("password"));
+      
+
+        // Assign server error to the appropriate field or general error
+        if (errorData.error?.includes("email")) {
+          setErrors({ email: errorData.error, password: "" });
+        } else if (errorData.error?.includes("password")) {
+          setErrors({ email: "", password: errorData.error });
+        } else {
+          setErrors({ email: "", password: "" });
+        }
       }
     } catch (err) {
       console.error("Fetch error:", err.message || err);
-      setServerError("An unexpected error occurred. Please try again.");
+      setErrors({
+        email: "",
+        password: "An unexpected error occurred. Please try again.",
+      });
     }
   };
 
@@ -104,9 +115,7 @@ const handleSubmit = async (e) => {
           error={!!errors.password }
           helperText={errors.password}
         />
-          {serverError && (
-          <p style={{ textAlign: "center", color: "red" }}>{serverError}</p>
-        )}
+         
         <Button type="submit" fullWidth variant="contained" sx={{marginTop:2}}
         onClick={handleSubmit}>
             Login</Button>
