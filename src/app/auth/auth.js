@@ -188,8 +188,10 @@ export async function login(req) {
   } catch (error) {
     console.error("Error during login:", error);
     return NextResponse.json(
-      { error: "Something went wrong" },
-      { status: 500 }
+
+      { error: "Incorrect password" },
+      { status: 400 }
+
     );
   }
 }
