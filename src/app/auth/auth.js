@@ -153,7 +153,9 @@ export async function login(req) {
 
     // Match email and password with the hardcoded user
     if (validatedData.data.email !== hardcodedUser.email) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ field: "email",
+        error: "User not found" },
+         { status: 404 });
     }
 
     const passwordMatched = await bcrypt.compare(
@@ -162,7 +164,8 @@ export async function login(req) {
     );
     if (!passwordMatched) {
       return NextResponse.json(
-        { error: "Invalid credentials" },
+        { field:"password",
+          error: "Incorrect Password" },
         { status: 400 }
       );
     }

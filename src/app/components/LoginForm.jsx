@@ -12,57 +12,58 @@ export default function AuthFormComponent() {
    email: '',
    password: ''});
 
-   const [serverError, setServerError] = useState(null);
+  
       const [errors, setErrors] = useState({
     email: "",
     password: "",
   })
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    // Validate the form
-    const { isValid, errors: validationErrors } = validateLoginForm(formData);
-    if (!isValid) {
-      setErrors(validationErrors); // Update validation errors
-      return;
-    }
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    // Clear errors if validation passes
-    setErrors({ email: "", password: "" });
+  // Validate the form
+  const { isValid, errors: validationErrors } = validateLoginForm(formData);
+  if (!isValid) {
+    setErrors(validationErrors); // Update validation errors
+    return;
+  }
 
-    try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include", // Ensure cookies are sent
-        body: JSON.stringify(formData),
-      });
+  // Clear errors if validation passes
+  setErrors({ email: "", password: "" });
 
-      if (response.ok) {
-        const data = await response.json();
-        window.location.href = "/dashboard"; // Redirect to dashboard
+  try {
+    const response = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include", // Ensure cookies are sent
+      body: JSON.stringify(formData),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      window.location.href = "/dashboard"; // Redirect to dashboard
+    } else {
+      const errorData = await response.json();
+      console.log("Error response from server:", errorData);
+
+      // Assign server error to the appropriate field
+      if (errorData.field === "email") {
+        setErrors({ email: errorData.error, password: "" });
+      } else if (errorData.field === "password") {
+        setErrors({ email: "", password: errorData.error });
       } else {
-        const errorData = await response.json();
-        console.log("Error response from server:", errorData.error?.includes("password"));
-      
-
-        // Assign server error to the appropriate field or general error
-        if (errorData.error?.includes("email")) {
-          setErrors({ email: errorData.error, password: "" });
-        } else if (errorData.error?.includes("password")) {
-          setErrors({ email: "", password: errorData.error });
-        } else {
-          setErrors({ email: "", password: "" });
-        }
+        setErrors({ email: "", password: "" });
       }
-    } catch (err) {
-      console.error("Fetch error:", err.message || err);
-      setErrors({
-        email: "",
-        password: "An unexpected error occurred. Please try again.",
-      });
     }
-  };
+  } catch (err) {
+    console.error("Fetch error:", err.message || err);
+    setErrors({
+      email: "",
+      password: "An unexpected error occurred. Please try again.",
+    });
+  }
+};
+
 
 
   return (
@@ -116,10 +117,10 @@ export default function AuthFormComponent() {
           helperText={errors.password}
         />
          
-        <Button type="submit" fullWidth variant="contained" sx={{marginTop:2}}
+         <Button type="submit" fullWidth variant="contained" sx={{marginTop:2}}
         onClick={handleSubmit}>
             Login</Button>
-       {serverError && (
+       { errors.password && (
           <p style={{ textAlign: "center", marginTop: "16px",color:"#1E88E5" }}>
           Forgot password? <a href="#">Reset here</a>
         </p>
