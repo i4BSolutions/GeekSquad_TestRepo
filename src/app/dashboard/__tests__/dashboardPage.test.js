@@ -9,18 +9,40 @@ global.fetch = jest.fn();
 describe("DashboardPage", () => {
   afterEach(() => {
     jest.clearAllMocks(); // Clear mocks after each test
+    global.fetch.mockRestore(); // Restore fetch mock after each test
   });
-  it("include Home text in dashboard Page", async () => {
-    
-    //Arrange 
+
+  it("includes Home text in the dashboard page", () => {
+    // Arrange
     render(<DashboardPage />);
-    //Act
-    //verify heading text
+
+    // Act
     const heading = screen.getByRole("heading", { name: /home/i });
 
-    //Assert
-   expect(heading).toBeInTheDocument();
+    // Assert
+    expect(heading).toBeInTheDocument();
   });
 
+  it("should fetch user data and show welcome message", async () => {
+    // Arrange
+    const hardcodedEmail = "glow@gmail.com";
+    global.fetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve({ email: hardcodedEmail }),
+    });
+    const alertMock = jest.spyOn(window, "alert").mockImplementation(() => {});
 
+    render(<DashboardPage />);
+    
+
+    // Act & Assert
+    await waitFor(() => {
+      expect(alertMock).toHaveBeenCalledWith(
+        `Welcome to the Dashboard, ${hardcodedEmail}!`
+      );
+    });
+
+    // Cleanup
+    alertMock.mockRestore();
+  });
 });
