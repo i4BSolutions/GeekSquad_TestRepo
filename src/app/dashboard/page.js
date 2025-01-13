@@ -8,8 +8,6 @@ export default function DashboardPage() {
   const [showCart, setShowCart] = useState(false);
   const [user, setUser] = useState(null);
 
-
-
   const toggleCart = () => {
     setShowCart(!showCart);
   };
@@ -40,27 +38,25 @@ export default function DashboardPage() {
 
         if (response.ok) {
           const data = await response.json();
+          console.log("User data:", data);
           setUser(data); // Save user data
-          if (data?.email) {
-            alert(`Welcome to the Dashboard, ${data.email}!`);
-          }
-         
         } else {
           console.error("Failed to fetch user data");
-          setWelcomeMsg("Welcome to the Dashboard!");
         }
-        // Show message for 3 seconds
-        setShowWelcome(true);
-        setTimeout(() => {
-          setShowWelcome(false);
-        }, 3000);
       } catch (error) {
         console.error("Error fetching user:", error);
-        setWelcomeMsg("Welcome to the Dashboard!");
       }
     };
     fetchUser();
   }, []);
+
+  // Show alert when user data is updated
+  useEffect(() => {
+    if (user?.email) {
+      console.log("About to call alert...");
+      alert(`Welcome to the Dashboard, ${user.email}!`);
+    }
+  }, [user]); // Dependency on `user`
 
   return (
     <div>
@@ -77,7 +73,6 @@ export default function DashboardPage() {
             </div>
           </header>
           <main className="products-container">
-           
             {products.map((product) => (
               <div key={product.id} className="product-card">
                 <div className="product-image"></div>
