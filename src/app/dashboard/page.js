@@ -1,11 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./dashboard.css";
 import Cart from "../cart/page";
+
 export default function DashboardPage() {
   const [cart, setCart] = useState([]);
-
   const [showCart, setShowCart] = useState(false);
+  const [user, setUser] = useState(null);
 
   const toggleCart = () => {
     setShowCart(!showCart);
@@ -25,6 +26,37 @@ export default function DashboardPage() {
   const addToCart = (product) => {
     setCart((prevCart) => [...prevCart, product]);
   };
+
+  // Fetch user data and set welcome message
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetch("/api/auth/login", {
+          method: "GET",
+          credentials: "include", // Include cookies for authentication
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("User data:", data);
+          setUser(data); // Save user data
+        } else {
+          console.error("Failed to fetch user data");
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  // Show alert when user data is updated
+  useEffect(() => {
+    if (user?.email) {
+      console.log("About to call alert...");
+      alert(`Welcome to the Dashboard, ${user.email}!`);
+    }
+  }, [user]); // Dependency on `user`
 
   return (
     <div>

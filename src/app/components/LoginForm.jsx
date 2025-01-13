@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
+import { validateLoginForm } from "../auth/validation";
 
 
 
@@ -10,10 +11,25 @@ export default function AuthFormComponent() {
  const [formData,setFormData] = useState({
    email: '',
    password: ''});
-    
-  const handleSubmit = async (e) => {
+
+  
+      const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  })
+
+ const handleSubmit = async (e) => {
   e.preventDefault();
-  console.log("Form Data:", formData);
+
+  // Validate the form
+  const { isValid, errors: validationErrors } = validateLoginForm(formData);
+  if (!isValid) {
+    setErrors(validationErrors); // Update validation errors
+    return;
+  }
+
+  // Clear errors if validation passes
+  setErrors({ email: "", password: "" });
 
   try {
     const response = await fetch("/api/auth/login", {
@@ -25,15 +41,30 @@ export default function AuthFormComponent() {
 
     if (response.ok) {
       const data = await response.json();
-      window.location.href = "/dashboard"; // Explicitly redirect
+      window.location.href = "/dashboard"; // Redirect to dashboard
     } else {
       const errorData = await response.json();
-      console.error("Error response from server:", errorData.error || "Unknown error");
+      console.log("Error response from server:", errorData);
+
+      // Assign server error to the appropriate field
+      if (errorData.field === "email") {
+        setErrors({ email: errorData.error, password: "" });
+      } else if (errorData.field === "password") {
+        setErrors({ email: "", password: errorData.error });
+      } else {
+        setErrors({ email: "", password: "" });
+      }
     }
   } catch (err) {
     console.error("Fetch error:", err.message || err);
+    setErrors({
+      email: "",
+      password: "An unexpected error occurred. Please try again.",
+    });
   }
 };
+
+
 
   return (
     <Box
@@ -58,7 +89,7 @@ export default function AuthFormComponent() {
         noValidate
         autoComplete="off"
       >
-        <div style={{ textAlign: "center" }}>
+        <div style={{ textAlign: "center",lineHeight: "50px",fontWeight:"bold" }}>
           <h1>Login</h1>
           <p>Enter your email and password to login</p>
         </div>
@@ -70,6 +101,8 @@ export default function AuthFormComponent() {
           margin="normal"
           value={formData.email}
           onChange={(e)=>setFormData({...formData,email:e.target.value})}
+          error={!!errors.email}
+          helperText={errors.email}
         />
         <TextField
           id="password"
@@ -80,14 +113,19 @@ export default function AuthFormComponent() {
           type="password"
           value={formData.password}
           onChange={(e)=> setFormData({...formData,password:e.target.value})}
+          error={!!errors.password }
+          helperText={errors.password}
         />
-        <Button type="submit" fullWidth variant="contained " sx={{marginTop:2}}
+         
+         <Button type="submit" fullWidth variant="contained" sx={{marginTop:2}}
         onClick={handleSubmit}>
             Login</Button>
-       
-        <p style={{ textAlign: "center", marginTop: "16px" }}>
-          Forgot your password? <a href="#">Reset it here</a>
+       { errors.password && (
+          <p style={{ textAlign: "center", marginTop: "16px",color:"#1E88E5" }}>
+          Forgot password? <a href="#">Reset here</a>
         </p>
+       )}
+       
       </Box>
     </Box>
   );

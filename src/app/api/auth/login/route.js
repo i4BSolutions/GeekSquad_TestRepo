@@ -19,24 +19,15 @@ export async function GET(req) {
     }
 
     const decoded = await verifySession(token.value);
+     console.log("Decoded Token: ", decoded);
     if (!decoded) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    console.log("Decoded Token: ", decoded);
    
-    const rows = await db("SELECT * FROM User WHERE UserId = ?", [
-      decoded.userId,
-    ]);
 
-    if (!rows || rows.length === 0) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
-    const user = rows[0];
+  
     return NextResponse.json({
-      id: user.UserId,
-      name: user.UserName,
-      email: user.UserEmail,
+      email: decoded.email,
     });
   } catch (error) {
     console.error("Error fetching user:", error);
