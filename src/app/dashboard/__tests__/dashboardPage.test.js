@@ -1,7 +1,8 @@
-import React from "react";
+import React, { act } from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import DashboardPage from "../page";
 import "@testing-library/jest-dom";
+
 
 // Mock the fetch API
 global.fetch = jest.fn();
@@ -45,4 +46,21 @@ describe("DashboardPage", () => {
     // Cleanup
     alertMock.mockRestore();
   });
+  describe("Behaviour",()=>{
+it("Add to cart clicked and item added to cart", async () => {
+  // Arrange
+  render(<DashboardPage />);
+  //Act
+  // When testing, code that causes React state updates should be wrapped into act(...):
+  act(() => {
+    const addToCart = screen.getAllByTestId("add-to-cart");
+    addToCart[0].click();
+  });
+
+  //Assert
+  const cartcount = screen.getAllByTestId("cart-count");
+  expect(cartcount).toHaveLength(1);
+});
+  })
+  
 });

@@ -69,7 +69,7 @@ export default function DashboardPage() {
               <span role="img" aria-label="cart" onClick={toggleCart}>
                 🛒
               </span>
-              <span className="cart-count">{cart.length}</span>
+              <span data-testid="cart-count" className="cart-count">{cart.length}</span>
             </div>
           </header>
           <main className="products-container">
@@ -78,7 +78,8 @@ export default function DashboardPage() {
                 <div className="product-image"></div>
                 <h3>{product.name}</h3>
                 <p>${product.price.toFixed(2)}</p>
-                <button
+                <button 
+                  data-testid="add-to-cart"
                   className="add-to-cart"
                   onClick={() => addToCart(product)}
                 >
