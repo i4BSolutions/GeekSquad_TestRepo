@@ -25,10 +25,10 @@ jobs:
     # Step 3: Install dependencies
     - name: Install dependencies
       run: npm install
-      
-    # Step 4: Format code 
-    - name: Format code 
-      run: npm run format 
+
+    # # Step 4: Format code 
+    # - name: Format code 
+    #   run: npm run format 
 
    # Step 5: integration tests
     - name: Run integration tests
