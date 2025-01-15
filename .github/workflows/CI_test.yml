@@ -26,9 +26,14 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    # Step 4: Run integration tests
+    # # Step 4: Format code 
+    # - name: Format code 
+    #   run: npm run format 
+
+   # Step 5: integration tests
     - name: Run integration tests
       run: npm run test
 
+    # Step 6: Check code coverage
     - name:  Check code coverage
       run: npm run test:coverage
