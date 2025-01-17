@@ -16,6 +16,9 @@ on:
 jobs:
   integration-tests:
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
     steps:
     # Step 1: Checkout the repository
@@ -32,11 +35,8 @@ jobs:
 
    # Step 5: integration tests
     - name: Run tests
-      env:
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
       run: npm run test
-      
+
     # Step 6: Check code coverage
     - name:  Check code coverage
       run: npm run test:coverage
