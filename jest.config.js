@@ -1,4 +1,7 @@
 const nextJest = require("next/jest");
+// jest.setup.js
+require('dotenv').config({ path: './.env.test' });
+
 
 /** @type {import('jest').Config} */
 const createJestConfig = nextJest({
@@ -10,10 +13,10 @@ const createJestConfig = nextJest({
 const config = {
   coverageProvider: "v8",
   testEnvironment: "jsdom",
+  setupFiles: ["dotenv/config"],
   // Add more setup options before each test is run
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  testPathIgnorePatterns: ["<rootDir>/.next/", "<rootDir>/node_modules/"]
-
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  testPathIgnorePatterns: ["<rootDir>/.next/", "<rootDir>/node_modules/"],
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
