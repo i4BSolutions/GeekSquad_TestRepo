@@ -17,7 +17,7 @@ function Users() {
   useEffect(() => {
     const fetchUsers = async () => {
      const { data, error } = await supabase.from("Users").select();
-     console.log("Supabase Data:", data);
+     //console.log("Supabase Data:", data);
 
       if (error) console.error("Error fetching users:", error);
       setUsers(data || []);
