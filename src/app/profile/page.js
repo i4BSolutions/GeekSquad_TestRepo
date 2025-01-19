@@ -63,11 +63,14 @@ export default function ProfilePage() {
         </IconButton>
       </Box>
       <Divider sx={{ width: "100%", borderColor: "rgba(0,0,0,0.2)" }} />
-      <Box maxWidth="sm" sx={{
-                mt:10,
-                mx: "auto",
-                p:2,
-      }}>
+      <Box
+        maxWidth="sm"
+        sx={{
+          mt: 10,
+          mx: "auto",
+          p: 2,
+        }}
+      >
         <TextField
           name="fullName"
           label="Full Name"
@@ -107,16 +110,31 @@ export default function ProfilePage() {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "justify-content",
+            justifyContent: "space-between",
             alignItems: "center",
-            gap:2,
-            mt:2
+            gap: 2,
+            mt: 2,
           }}
         >
-        <Button variant="contained">Edit</Button>
-          
-        <Button variant="contained" fullWidth disabled>Save Changes</Button>
-          
+          <Button
+            variant="contained"
+            sx={{
+              bgcolor: "#E0E0E0",
+              color: "#000000",
+              maxwidth: "200px",
+            }}
+          >
+            Edit Profile
+          </Button>
+
+          <Button
+            variant="contained"
+            fullWidth
+            disabled
+            sx={{ flex: 1 }}
+          >
+            Save Changes
+          </Button>
         </Box>
       </Box>
     </Container>
