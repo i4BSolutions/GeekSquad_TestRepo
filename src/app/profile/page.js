@@ -1,0 +1,124 @@
+"use client";
+import React, { useState } from "react";
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  IconButton,
+  useMediaQuery,
+  useTheme,
+  Divider,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
+export default function ProfilePage() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const [isEditable, setIsEditable] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: "Mg Mg",
+    email: "mgmg@domain.com",
+    phoneNumber: "09123456789",
+    address: "11th Street, Between 72&73 Streets",
+  });
+
+  const handleEdit = () => {
+    setIsEditable(true);
+  };
+
+  const handleSave = () => {
+    setIsEditable(false);
+    alert("Profile updated successfully!");
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  return (
+    <Container maxWidth="lg" sx={{}}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          width: "100%",
+          textAlign: "center",
+          py: 2, // Padding for better spacing
+        }}
+      >
+        <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}>
+          <Typography variant="h4" fontWeight="bold">
+            Profile
+          </Typography>
+        </Box>
+        <IconButton aria-label="close">
+          <CloseIcon />
+        </IconButton>
+      </Box>
+      <Divider sx={{ width: "100%", borderColor: "rgba(0,0,0,0.2)" }} />
+      <Box maxWidth="sm" sx={{
+                mt:10,
+                mx: "auto",
+                p:2,
+      }}>
+        <TextField
+          name="fullName"
+          label="Full Name"
+          value={formData.fullName}
+          onChange={handleChange}
+          fullWidth
+          disabled={!isEditable}
+          sx={{ my: 2 }}
+        />
+        <TextField
+          name="email"
+          label="Email"
+          value={formData.email}
+          onChange={handleChange}
+          fullWidth
+          disabled={!isEditable}
+          sx={{ my: 2 }}
+        />
+        <TextField
+          name="phoneNumber"
+          label="Phone Number"
+          value={formData.phoneNumber}
+          onChange={handleChange}
+          fullWidth
+          disabled={!isEditable}
+          sx={{ my: 2 }}
+        />
+        <TextField
+          name="address"
+          label="Address"
+          value={formData.address}
+          onChange={handleChange}
+          fullWidth
+          disabled={!isEditable}
+          sx={{ my: 2 }}
+        />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "justify-content",
+            alignItems: "center",
+            gap:2,
+            mt:2
+          }}
+        >
+        <Button variant="contained">Edit</Button>
+          
+        <Button variant="contained" fullWidth disabled>Save Changes</Button>
+          
+        </Box>
+      </Box>
+    </Container>
+  );
+}
