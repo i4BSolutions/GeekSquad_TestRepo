@@ -27,6 +27,7 @@ export default function ProfilePage() {
 
   const handleEdit = () => {
     setIsEditable(true);
+    
   };
 
   const handleSave = () => {
@@ -123,6 +124,8 @@ export default function ProfilePage() {
               color: "#000000",
               maxwidth: "200px",
             }}
+            disabled={isEditable}
+            onClick={handleEdit}
           >
             Edit Profile
           </Button>
@@ -130,8 +133,9 @@ export default function ProfilePage() {
           <Button
             variant="contained"
             fullWidth
-            disabled
+            disabled={!isEditable}
             sx={{ flex: 1 }}
+            onClick={handleSave}
           >
             Save Changes
           </Button>
