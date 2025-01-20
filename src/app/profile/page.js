@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
+
 export default function ProfilePage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -87,7 +88,7 @@ export default function ProfilePage() {
           value={formData.email}
           onChange={handleChange}
           fullWidth
-          disabled={!isEditable}
+          disabled
           sx={{ my: 2 }}
         />
         <TextField
