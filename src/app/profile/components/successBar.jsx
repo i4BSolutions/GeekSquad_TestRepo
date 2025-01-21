@@ -8,12 +8,13 @@ export default function SuccessBar({ open, handleClose }) {
         autoHideDuration={6000}
         onClose={handleClose}
          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-       sx={{ 
-                width: { xs: '90%', sm: '75%', md: '600px' },  // Responsive width
+         sx={{ 
+                width: '100%', 
+                height: '10%',  // Adjust height
+                maxWidth: '600px',  // Adjust the width of the snackbar
                 mx: 'auto',  // Center it horizontally
-                mt: 2,  // Add margin to place below the form
-                px: { xs: 1, sm: 2 },  // Add padding for better spacing
-                mb: { xs: '6%', sm: '6%',md:'10%' }  // Add margin to place above the form
+                mt: 2  ,
+                 marginBottom:"6%"
             }}
         message="Your profile has been updated successfully!">
             
