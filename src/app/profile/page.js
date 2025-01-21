@@ -14,6 +14,9 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 
 import { ProfileFormSchema } from "../utils/errordefinition";
+import  SuccessBar  from "./components/successBar";
+import FailBar from "./components/failBar";
+import { set } from "zod";
 
 
 export default function ProfilePage() {
@@ -22,6 +25,8 @@ export default function ProfilePage() {
 
 
   const [isEditable, setIsEditable] = useState(false);
+  const [openSuccessBar, setOpenSuccessBar] = useState(false);
+  const [closeSuccessBar, setCloseSuccessBar] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "Mg Mg",
     email: "mgmg@domain.com",
@@ -35,15 +40,43 @@ export default function ProfilePage() {
     
   };
 
-  const handleSave = () => {
+
+const SaveChanges = async (validatedData) => {
+  try {
+    const response = await fetch("/api/profile/updateProfile", {
+      method: "PUT",
+      body: JSON.stringify(validatedData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (response.ok) {
+      // Show success message
+    setOpenSuccessBar(true);
+    } else {
+      // Show error message
+      setCloseSuccessBar(true);
+    }
+  } catch (error) {
+    console.log("Error: ", error);
+    setErrors(error.formErrors?.fieldErrors || {});
+  }
+};
+
+
+  const handleSave =async () => {
     try{
-        ProfileFormSchema.parse({
+       const validatedData= ProfileFormSchema.parse({
         fullName: formData.fullName,
         phoneNumber: formData.phoneNumber,
         address: formData.address,
       });
     setIsEditable(false);
-    alert("Profile updated successfully!");
+  
+    await SaveChanges({validatedData});
+   
+     
+
     setErrors({});
     }
     catch(error){
@@ -129,8 +162,8 @@ export default function ProfilePage() {
           fullWidth
           disabled={!isEditable}
           sx={{ my: 2 }}
-            error={errors.address}
-            helperText={errors.address}
+          error={errors.address}
+          helperText={errors.address}
         />
         <Box
           sx={{
@@ -164,6 +197,18 @@ export default function ProfilePage() {
             Save Changes
           </Button>
         </Box>
+        <FailBar
+          open={closeSuccessBar}
+          handleClose={() => {
+            setCloseSuccessBar(false);
+          }}
+        />
+        <SuccessBar
+          open={openSuccessBar}
+          handleClose={() => {
+            setOpenSuccessBar(false);
+          }}
+        />
       </Box>
     </Container>
   );
