@@ -228,7 +228,3 @@ const SaveChanges = async (validatedData) => {
   }
 
 
-      </Box>
-    </Container>
-  );
-}
