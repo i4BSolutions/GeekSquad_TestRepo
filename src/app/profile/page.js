@@ -14,29 +14,85 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 
 
+import { ProfileFormSchema } from "../utils/errordefinition";
+import  SuccessBar  from "./components/successBar";
+import FailBar from "./components/failBar";
+import { set } from "zod";
+
+
+
 export default function ProfilePage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+
+
   const [isEditable, setIsEditable] = useState(false);
+  const [openSuccessBar, setOpenSuccessBar] = useState(false);
+  const [closeSuccessBar, setCloseSuccessBar] = useState(false);
+
   const [formData, setFormData] = useState({
     fullName: "Mg Mg",
     email: "mgmg@domain.com",
     phoneNumber: "09123456789",
     address: "11th Street, Between 72&73 Streets",
   });
+    const [errors, setErrors] = useState({});
+
 
   const handleEdit = () => {
     setIsEditable(true);
     
   };
 
-  const handleSave = () => {
+
+const SaveChanges = async (validatedData) => {
+  try {
+    const response = await fetch("/api/profile/updateProfile", {
+      method: "PUT",
+      body: JSON.stringify(validatedData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (response.ok) {
+      // Show success message
+    setOpenSuccessBar(true);
+    } else {
+      // Show error message
+      setCloseSuccessBar(true);
+    }
+  } catch (error) {
+    console.log("Error: ", error);
+    setErrors(error.formErrors?.fieldErrors || {});
+  }
+};
+
+
+  const handleSave =async () => {
+    try{
+       const validatedData= ProfileFormSchema.parse({
+        fullName: formData.fullName,
+        phoneNumber: formData.phoneNumber,
+        address: formData.address,
+      });
     setIsEditable(false);
-    alert("Profile updated successfully!");
+  
+    await SaveChanges({validatedData});
+   
+     
+
+    setErrors({});
+    }
+    catch(error){
+        setErrors(error.formErrors.fieldErrors);
+      
   };
+}
 
   const handleChange = (e) => {
+  
+
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -81,6 +137,10 @@ export default function ProfilePage() {
           fullWidth
           disabled={!isEditable}
           sx={{ my: 2 }}
+
+          error={errors.fullName}
+          helperText={errors.fullName}
+
         />
         <TextField
           name="email"
@@ -99,6 +159,10 @@ export default function ProfilePage() {
           fullWidth
           disabled={!isEditable}
           sx={{ my: 2 }}
+
+          error={errors.phoneNumber}
+          helperText={errors.phoneNumber}
+
         />
         <TextField
           name="address"
@@ -108,6 +172,10 @@ export default function ProfilePage() {
           fullWidth
           disabled={!isEditable}
           sx={{ my: 2 }}
+
+          error={errors.address}
+          helperText={errors.address}
+
         />
         <Box
           sx={{
@@ -141,6 +209,25 @@ export default function ProfilePage() {
             Save Changes
           </Button>
         </Box>
+
+        <FailBar
+          open={closeSuccessBar}
+          handleClose={() => {
+            setCloseSuccessBar(false);
+          }}
+        />
+        <SuccessBar
+          open={openSuccessBar}
+          handleClose={() => {
+            setOpenSuccessBar(false);
+          }}
+        />
+      </Box>
+    </Container>
+  );
+  }
+
+
       </Box>
     </Container>
   );

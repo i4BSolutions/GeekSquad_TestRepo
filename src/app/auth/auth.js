@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { createSession } from "./session.js";
 
-import { signUpFormSchema, loginFormSchema } from "./errordefinition.js";
+import { signUpFormSchema, loginFormSchema } from "../utils/errordefinition.js";
 
 // Hardcoded user details
 const hardcodedUser = {
