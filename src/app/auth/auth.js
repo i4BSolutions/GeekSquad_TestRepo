@@ -1,6 +1,6 @@
 "use server";
 import { NextResponse } from "next/server"; // Use NextResponse from "next/server"
-import db from "../utils/db.js";
+
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { createSession } from "./session.js";
@@ -19,64 +19,64 @@ const SESSION_EXPIRATION = "1d"; // Token expiration time
 
 
 // signUp
-export async function signUp(req) {
-  try {
-    // 1. Parse request body
-    const body = await req.json();
+// export async function signUp(req) {
+//   try {
+//     // 1. Parse request body
+//     const body = await req.json();
 
-    // 2. Validate form field data
-    const validatedData = signUpFormSchema.safeParse(body);
+//     // 2. Validate form field data
+//     const validatedData = signUpFormSchema.safeParse(body);
 
-    // Validation failed, return early
-    if (!validatedData.success) {
-      return NextResponse.json(
-        { error: validatedData.error.flatten().fieldErrors },
-        { status: 400 } // Set status in NextResponse options
-      );
-    }
+//     // Validation failed, return early
+//     if (!validatedData.success) {
+//       return NextResponse.json(
+//         { error: validatedData.error.flatten().fieldErrors },
+//         { status: 400 } // Set status in NextResponse options
+//       );
+//     }
 
-    // 3. Check if email already exists
-    const [rows] = await db("SELECT * FROM User WHERE UserEmail = ?", [
-      validatedData.data.email,
-    ]);
+//     // 3. Check if email already exists
+//     const [rows] = await db("SELECT * FROM User WHERE UserEmail = ?", [
+//       validatedData.data.email,
+//     ]);
 
-    // If email exists, return early
-    if (rows && rows.length > 0) {
-      return NextResponse.json(
-        { error: "Email already exists! Use another email" },
-        { status: 400 }
-      );
-    }
+//     // If email exists, return early
+//     if (rows && rows.length > 0) {
+//       return NextResponse.json(
+//         { error: "Email already exists! Use another email" },
+//         { status: 400 }
+//       );
+//     }
 
-    // 4. Hash password
-    const hashedPassword = await bcrypt.hash(validatedData.data.password, 10);
+//     // 4. Hash password
+//     const hashedPassword = await bcrypt.hash(validatedData.data.password, 10);
 
-    // 5. Save user to db and get insertId
-    const result = await db("INSERT INTO User(UserEmail, UserPassword) VALUES(?,?)", [
-      validatedData.data.email,
-      hashedPassword,
-    ]);
-    const userId = result.insertId;
+//     // 5. Save user to db and get insertId
+//     const result = await db("INSERT INTO User(UserEmail, UserPassword) VALUES(?,?)", [
+//       validatedData.data.email,
+//       hashedPassword,
+//     ]);
+//     const userId = result.insertId;
 
-    // 6. Create session for user
-    const token = await createSession(userId);
+//     // 6. Create session for user
+//     const token = await createSession(userId);
 
-    // 7. Send success response
-    return NextResponse.json(
-      {
-        message: "User created successfully",
-        data: { userId, token },
-      },
-      { status: 201 }
-    );
-  } catch (error) {
-    console.error("Error during sign up:", error);
-    return NextResponse.json(
-      { error: "Something went wrong" },
-      { status: 500 }
-    );
-  }
-}
+//     // 7. Send success response
+//     return NextResponse.json(
+//       {
+//         message: "User created successfully",
+//         data: { userId, token },
+//       },
+//       { status: 201 }
+//     );
+//   } catch (error) {
+//     console.error("Error during sign up:", error);
+//     return NextResponse.json(
+//       { error: "Something went wrong" },
+//       { status: 500 }
+//     );
+//   }
+// }
 
 // //login with mysql database
 // export async function login(req, res) {

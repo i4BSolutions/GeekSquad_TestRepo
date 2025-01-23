@@ -1,7 +1,7 @@
 import { login
  } from "@/app/auth/auth"; 
 import { NextResponse } from "next/server";
-import db from "@/app/utils/db";
+
 import { verifySession } from "../../../auth/session";
 
 export async function POST(req, res) {

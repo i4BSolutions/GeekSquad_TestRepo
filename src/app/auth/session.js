@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import db from '../utils/db';
+
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET= "mysecret";

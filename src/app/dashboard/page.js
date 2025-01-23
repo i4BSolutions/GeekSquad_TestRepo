@@ -3,6 +3,32 @@ import React, { useEffect, useState } from "react";
 import "./dashboard.css";
 import Cart from "../cart/page";
 
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
+
+
+function Users() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+     const { data, error } = await supabase.from("Users").select();
+     //console.log("Supabase Data:", data);
+
+      if (error) console.error("Error fetching users:", error);
+      setUsers(data || []);
+    };
+    fetchUsers();
+  }, []);
+
+  return <pre>{JSON.stringify(users,null,2)}</pre>;
+}
+
+
 export default function DashboardPage() {
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
@@ -38,7 +64,7 @@ export default function DashboardPage() {
 
         if (response.ok) {
           const data = await response.json();
-          console.log("User data:", data);
+          console.log("User data from loginAPI :", data);
           setUser(data); // Save user data
         } else {
           console.error("Failed to fetch user data");
@@ -88,6 +114,8 @@ export default function DashboardPage() {
               </div>
             ))}
           </main>
+          <h1>Users</h1>
+          <Users/>
         </div>
       )}
       {showCart && (
