@@ -3,12 +3,12 @@ import React, { useEffect, useState } from "react";
 import "./dashboard.css";
 import Cart from "../cart/page";
 import { redirect } from 'next/navigation'
-
+import { useUser } from "../context/UserContext";
 import supabase from "../utils/supabaseClient";
 
 function Users() {
   const [users, setUsers] = useState([]);
-
+  
   useEffect(() => {
     const fetchUsers = async () => {
      const { data, error } = await supabase.from("Users").select();
@@ -27,7 +27,8 @@ function Users() {
 export default function DashboardPage() {
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
-  const [user, setUser] = useState(null);
+  
+  const { user } = useUser();
 
   const toggleCart = () => {
     setShowCart(!showCart);
@@ -48,28 +49,7 @@ export default function DashboardPage() {
     setCart((prevCart) => [...prevCart, product]);
   };
 
-  // Fetch user data and set welcome message
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetch("/api/auth/login", {
-          method: "GET",
-          credentials: "include", // Include cookies for authentication
-        });
 
-        if (response.ok) {
-          const data = await response.json();
-          console.log("User data from loginAPI :", data);
-          setUser(data); // Save user data
-        } else {
-          console.error("Failed to fetch user data");
-        }
-      } catch (error) {
-        console.error("Error fetching user:", error);
-      }
-    };
-    fetchUser();
-  }, []);
 
   // Show alert when user data is updated
   useEffect(() => {
