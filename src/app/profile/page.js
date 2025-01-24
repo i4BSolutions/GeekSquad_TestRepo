@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   TextField,
@@ -18,6 +18,7 @@ import { ProfileFormSchema } from "../utils/errordefinition";
 import  SuccessBar  from "./components/successBar";
 import FailBar from "./components/failBar";
 import { redirect } from "next/navigation";
+import { useUser } from "../context/UserContext";
 
 
 
@@ -26,18 +27,30 @@ export default function ProfilePage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-
+ const { user } = useUser();
+ console.log("User : ", user)
 
   const [isEditable, setIsEditable] = useState(false);
   const [openSuccessBar, setOpenSuccessBar] = useState(false);
   const [closeSuccessBar, setCloseSuccessBar] = useState(false);
-
   const [formData, setFormData] = useState({
-    fullName: "Mg Mg",
-    email: "mgmg@domain.com",
-    phoneNumber: "09123456789",
-    address: "11th Street, Between 72&73 Streets",
+    fullName: "Loading...",
+    email: "loading...",
+    phoneNumber: "loading..",
+    address: "loading...",
   });
+
+
+useEffect(() => {
+  if (user) {
+    setFormData({
+      fullName: user.fullName || "",
+      email: user.email || "",
+      phoneNumber: user.phoneNumber || "",
+      address: user.address || "",
+    });
+  }
+}, [user]);
     const [errors, setErrors] = useState({});
 
 
