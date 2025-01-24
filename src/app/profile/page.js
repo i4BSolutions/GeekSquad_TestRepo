@@ -17,6 +17,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { ProfileFormSchema } from "../utils/errordefinition";
 import  SuccessBar  from "./components/successBar";
 import FailBar from "./components/failBar";
+import { redirect } from "next/navigation";
 
 
 
@@ -116,7 +117,7 @@ const SaveChanges = async (validatedData) => {
             Profile
           </Typography>
         </Box>
-        <IconButton aria-label="close">
+        <IconButton aria-label="close" onClick={()=> redirect("/dashboard")}>
           <CloseIcon />
         </IconButton>
       </Box>

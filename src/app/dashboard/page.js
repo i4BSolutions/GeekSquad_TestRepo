@@ -4,7 +4,7 @@ import "./dashboard.css";
 import Cart from "../cart/page";
 import { redirect } from 'next/navigation'
 
-import supabase from "../utils/supabase";
+import supabase from "../utils/supabaseClient";
 
 function Users() {
   const [users, setUsers] = useState([]);

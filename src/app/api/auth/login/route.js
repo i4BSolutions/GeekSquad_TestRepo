@@ -1,7 +1,7 @@
 import { login
  } from "@/app/auth/auth"; 
 import { NextResponse } from "next/server";
-import supabase from "@/app/utils/supabase";
+import supabase from "@/app/utils/supabaseClient";
 import { verifySession } from "../../../auth/session";
 
 export async function POST(req, res) {
