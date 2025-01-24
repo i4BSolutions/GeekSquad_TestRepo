@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import "./dashboard.css";
 import Cart from "../cart/page";
+import { redirect } from 'next/navigation'
 
 import { createClient } from "@supabase/supabase-js";
 
@@ -89,7 +90,9 @@ export default function DashboardPage() {
       {!showCart && (
         <div className="dashboard">
           <header className="header">
-            <div className="logo-circle"></div>
+            <div className="logo-circle" onClick={()=> redirect("/profile")}>
+
+            </div>
             <h1>Home</h1>
             <div className="cart">
               <span role="img" aria-label="cart" onClick={toggleCart}>
