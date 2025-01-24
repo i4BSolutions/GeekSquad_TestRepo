@@ -62,7 +62,7 @@ useEffect(() => {
 
 const SaveChanges = async (validatedData) => {
   try {
-    const response = await fetch("/api/profile/updateProfile", {
+    const response = await fetch(`/api/profile/updateProfile?email=${user.email}`, {
       method: "PUT",
       body: JSON.stringify(validatedData),
       headers: {
