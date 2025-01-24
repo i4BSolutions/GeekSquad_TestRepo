@@ -4,24 +4,8 @@ import "./dashboard.css";
 import Cart from "../cart/page";
 import { redirect } from 'next/navigation'
 import { useUser } from "../context/UserContext";
-import supabase from "../utils/supabaseClient";
 
-function Users() {
-  const [users, setUsers] = useState([]);
-  
-  useEffect(() => {
-    const fetchUsers = async () => {
-     const { data, error } = await supabase.from("Users").select();
-     //console.log("Supabase Data:", data);
 
-      if (error) console.error("Error fetching users:", error);
-      setUsers(data || []);
-    };
-    fetchUsers();
-  }, []);
-
-  return <pre>{JSON.stringify(users,null,2)}</pre>;
-}
 
 
 export default function DashboardPage() {
@@ -91,8 +75,7 @@ export default function DashboardPage() {
               </div>
             ))}
           </main>
-          <h1>Users</h1>
-          <Users/>
+        
         </div>
       )}
       {showCart && (
